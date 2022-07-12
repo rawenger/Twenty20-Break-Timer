@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct Twenty20_Break_TimerApp: App {
+    
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+//        WindowGroup {
+//            ContentView()
+//        }
+        Settings {
+            EmptyView()
         }
     }
 }
