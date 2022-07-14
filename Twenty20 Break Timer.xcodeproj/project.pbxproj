@@ -15,6 +15,8 @@
 		943B9950287D21AC00307DE9 /* Twenty20_Break_TimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943B994F287D21AC00307DE9 /* Twenty20_Break_TimerUITests.swift */; };
 		943B9952287D21AC00307DE9 /* Twenty20_Break_TimerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943B9951287D21AC00307DE9 /* Twenty20_Break_TimerUITestsLaunchTests.swift */; };
 		943B995F287D253C00307DE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943B995E287D253C00307DE9 /* AppDelegate.swift */; };
+		947AC80B287E2C770075F50F /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947AC80A287E2C770075F50F /* PersistenceManager.swift */; };
+		947AC80D287E36230075F50F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947AC80C287E36230075F50F /* Timer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		943B994F287D21AC00307DE9 /* Twenty20_Break_TimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Twenty20_Break_TimerUITests.swift; sourceTree = "<group>"; };
 		943B9951287D21AC00307DE9 /* Twenty20_Break_TimerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Twenty20_Break_TimerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		943B995E287D253C00307DE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		947AC80A287E2C770075F50F /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		947AC80C287E36230075F50F /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,8 @@
 				943B993C287D21AC00307DE9 /* Twenty20_Break_Timer.entitlements */,
 				943B9939287D21AC00307DE9 /* Preview Content */,
 				943B995E287D253C00307DE9 /* AppDelegate.swift */,
+				947AC80A287E2C770075F50F /* PersistenceManager.swift */,
+				947AC80C287E36230075F50F /* Timer.swift */,
 			);
 			path = "Twenty20 Break Timer";
 			sourceTree = "<group>";
@@ -265,6 +271,8 @@
 				943B995F287D253C00307DE9 /* AppDelegate.swift in Sources */,
 				943B9936287D21AA00307DE9 /* ContentView.swift in Sources */,
 				943B9934287D21AA00307DE9 /* Twenty20_Break_TimerApp.swift in Sources */,
+				947AC80D287E36230075F50F /* Timer.swift in Sources */,
+				947AC80B287E2C770075F50F /* PersistenceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
