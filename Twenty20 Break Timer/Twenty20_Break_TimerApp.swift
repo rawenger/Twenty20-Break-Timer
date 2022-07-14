@@ -16,8 +16,11 @@ struct Twenty20_Break_TimerApp: App {
 //        WindowGroup {
 //            ContentView()
 //        }
+        
+        #if os(macOS)
         Settings {
-            EmptyView()
+            SettingsView()
         }
+        #endif
     }
 }
