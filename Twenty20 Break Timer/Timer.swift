@@ -8,9 +8,11 @@
 import Foundation
 import AppKit
 
+@inline(__always) func floor(_ num: Double) -> Double { return Double(Int(num)) }
+
 
 public final class BreakTimerController: ObservableObject {
-    static let shared = BreakTimerController(breakDuration: 20.0, breakInterval: 20.0 * 60.0)
+    static let shared = BreakTimerController(breakDuration: 20.0, breakInterval: 20.0)
     
     public var isBreakHappening = false
 
@@ -20,23 +22,25 @@ public final class BreakTimerController: ObservableObject {
     
     private var timeRemaining: TimeInterval?
     
-    private var breakIntervalSeconds: TimeInterval
-    private var breakDurationSeconds: TimeInterval
-
-    public var breakDuration: Int {
-        get { return Int(breakDurationSeconds) }
-        set { breakDurationSeconds = Double(newValue) }
+    // need to floor the stored properties b/c SwiftUI slider won't round them off for us
+    private var breakIntervalSeconds: TimeInterval {
+        get { return floor(breakInterval) * 60.0 }
+        set { breakInterval = newValue / 60.0 }
     }
     
-    public var breakInterval: Int {
-        get { return Int(breakIntervalSeconds) / 60 }
-        set { breakIntervalSeconds = Double(newValue * 60) }
+    private var breakDurationSeconds: TimeInterval {
+        get { return floor(breakDuration) }
+        set { breakDuration = newValue }
     }
+
+    @Published public var breakDuration: TimeInterval
+    
+    @Published public var breakInterval: TimeInterval
     
     public init(breakDuration: TimeInterval, breakInterval: TimeInterval) {
         print("creating new BreakTimerController object")
-        breakDurationSeconds = breakDuration
-        breakIntervalSeconds = breakInterval
+        self.breakDuration = breakDuration
+        self.breakInterval = breakInterval
     }
     
     public func startTimer(timeInSeconds: TimeInterval? = nil) {
@@ -98,6 +102,10 @@ public final class BreakTimerController: ObservableObject {
      */
     private func showBreakTimeAlert(_ caller: Timer) {
         
+        // Save the previous frontmost application so we can restore it after
+        // the user dismisses our popup alerts
+        let oldKeyApp = NSWorkspace.shared.frontmostApplication
+        
         let alert = NSAlert()
         alert.messageText = "Break Time!"
         alert.informativeText = "Take 20 seconds to focus your eyes on an object at least 20 feet away"
@@ -119,11 +127,16 @@ public final class BreakTimerController: ObservableObject {
                                          block: showEndBreakAlert)
             timer!.tolerance = 15
         }
+        
+        // Restore old frontmost app
+        oldKeyApp?.activate()
     }
     
     /// TODO: Store and return previously active application to the foreground after alert is dismissed
     /// (store needs to be done in `showBreakTimeAlert()`)
     private func showEndBreakAlert(_ caller: Timer) {
+        
+        let oldKeyApp = NSWorkspace.shared.frontmostApplication
         
         let alert = NSAlert()
         alert.messageText = "Break Over!"
@@ -147,6 +160,9 @@ public final class BreakTimerController: ObservableObject {
             isBreakHappening = false
             startTimer()
         }
+        
+        oldKeyApp?.activate()
+
     }
     
 //    public func loadValue() {

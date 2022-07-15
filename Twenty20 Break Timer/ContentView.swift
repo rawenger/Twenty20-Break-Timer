@@ -8,15 +8,19 @@
 import SwiftUI
 
 func launchSettings() {
-    // the only way I could find to do this that didn't involve creating a whole new class
-    // uses a private API :(
+    
+    // The only way I could find to do this in SwiftUI that didn't involve creating
+    // a whole new class uses a private API :(
     // ... and a selector that was renamed in macOS 13:
     // https://stackoverflow.com/q/65355696
+    // Not sure why `Settings()` doesn't work, but oh well
     if #available(OSX 13, *) {
         NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
     } else {
         NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
     }
+    
+    NSApp.activate(ignoringOtherApps: true)
 }
 
 struct RunningTimerView: View {
@@ -134,83 +138,50 @@ struct ContentView: View {
 //    }
 //}
 
+//TODO: make this hook into PersistenceManager.swift so prefs will actually be preserved across launches
 struct SettingsView: View {
     @State private var launchAtLogin = PersistenceManager.instance.launchAtLogin ?? false
     
     /// time between breaks in *minutes*
-    @State private var breakInterval = PersistenceManager.instance.breakInterval ?? 20
+//    @State private var breakInterval = PersistenceManager.instance.breakInterval ?? 20
         
     /// duration of each break in *seconds*
-    @State private var breakDuration = PersistenceManager.instance.breakDuration ?? 20
+//    @State private var breakDuration = PersistenceManager.instance.breakDuration ?? 20
     
     @ObservedObject private var timerController = BreakTimerController.shared
     
     var body: some View {
-        VStack(alignment: .leading) {
+        
+        // TODO: consider revisiting this to tweak the behavior when too large a value is entered
+        // (cap at 60 rather than truncating to the maximum digits <= 60)
+        let formatter = NumberFormatter()
+        formatter.minimum = 1
+        formatter.maximum = 60
+        formatter.allowsFloats = false
+
+        return VStack(alignment: .leading) {
+            
             Spacer().frame(height: 15)
             HStack {
-                // TODO: make it so the text box corrects out of bounds values
-                // (otherwise they will be silently applied to the `breakInterval`
-                // variable)
                 Text("Minutes between breaks:").padding(.leading)
-                TextField("Number", value: Binding(
-                    /// TODO: consider changing `BreakTimerController.breakInterval` & `Duration` to `Double`s
-                    get: {
-                        Float(timerController.breakInterval)
-                    },
-                    set: { newValue in
-                        if newValue < 1 {
-                            timerController.breakInterval = 1
-                        } else if newValue > 60 {
-                            timerController.breakInterval = 60
-                        } else {
-                            timerController.breakInterval = Int(newValue)
-                        }
-                        print("breakInterval: \(timerController.breakInterval) minutes")
-                    }
-                ), formatter: NumberFormatter())
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 50)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Number", value: $timerController.breakInterval, formatter: formatter)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 50)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             
             // TODO: figure out how to make this smaller (vertically)
             Spacer()
             
-            Slider(value: Binding(
-                get: {
-                    Float(breakInterval)
-                },
-                set: { newValue in
-                    if newValue < 1 {
-                        breakInterval = 1
-                    } else if newValue > 60 {
-                        breakInterval = 60
-                    } else {
-                        breakInterval = Int(newValue)
-                    }
-                    
-                }
-            ), in: 1...60).padding(.horizontal).padding(.top, -20)
-            
-            //                VStack(alignment: .leading) {
-            //                    Slider(
-            //                        value: $breakInterval,
-            //                        in: 1...60,
-            //                        step: 1,
-            //                        onEditingChanged: <#T##(Bool) -> Void#>
-            
-            //                        isOn: Binding(
-            //                        get: { launchAtLogin },
-            //
-            //                        set: { newValue in
-            //                            launchAtLogin = newValue
-            //                            print("Launch at login turned \(newValue ? "on" : "off")!")
-            ////                            LaunchAtLogin.isEnabled = newValue
-            //                        }
-            //                    )) {
-            //                        Text("Launch at login")
-            //                    }
+            Slider(
+                value: $timerController.breakInterval,
+                in: 1...60,
+//                step: 5,
+                label: {},
+                minimumValueLabel: { Text("1") },
+                maximumValueLabel: { Text("60") },
+                onEditingChanged: { edited in print("breakInterval: \(timerController.breakInterval)") }
+            ).padding(.horizontal).padding(.top, -20)
             
         }.frame(width: 400, height: 200)
     }
