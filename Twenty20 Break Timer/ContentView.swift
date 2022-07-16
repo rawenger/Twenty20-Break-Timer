@@ -5,6 +5,18 @@
 //  Created by Ryan Wenger on 7/11/22.
 //
 
+/* TODO:
+ - fix visibility in light mode ✅
+ - fix variability in 20-second break timer (maybe reduce tolerance to zero/show a live countdown on screen?)
+ - get transient settings to work
+ - make it so popover window updates to show the next break time
+ - add visual functionality to pause/stop buttons
+ - make it look good visually
+ - change menubar icon to dark color when in dark mode ✅
+ - refactor TimerController to use the `NSBackgroundActivityScheduler` API
+    (https://developer.apple.com/library/archive/documentation/Performance/Conceptual/power_efficiency_guidelines_osx/SchedulingBackgroundActivity.html)
+ */
+
 import SwiftUI
 
 func launchSettings() {
@@ -41,14 +53,12 @@ struct RunningTimerView: View {
             Text(timerController.isBreakHappening ? "Break Over At" : "Next Break At")
                 .font(.headline)
                 .fontWeight(.bold)
-                .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
                 .padding()
             
             Text(timerController.getFireTime())
                 .font(.title)
 //                .fontWeight(.bold)
-                .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
                 .padding()
             

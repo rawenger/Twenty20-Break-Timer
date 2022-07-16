@@ -107,7 +107,7 @@ public final class BreakTimerController: ObservableObject {
         let oldKeyApp = NSWorkspace.shared.frontmostApplication
         
         let alert = NSAlert()
-        alert.messageText = "Break Time!"
+        alert.messageText = "(fake) Break Time!"
         alert.informativeText = "Take 20 seconds to focus your eyes on an object at least 20 feet away"
         alert.alertStyle = .informational
         alert.addButton(withTitle: "OK")
@@ -125,7 +125,7 @@ public final class BreakTimerController: ObservableObject {
             timer = Timer.scheduledTimer(withTimeInterval: breakDurationSeconds,
                                          repeats: false,
                                          block: showEndBreakAlert)
-            timer!.tolerance = 15
+            timer!.tolerance = 0
         }
         
         // Restore old frontmost app
@@ -139,7 +139,7 @@ public final class BreakTimerController: ObservableObject {
         let oldKeyApp = NSWorkspace.shared.frontmostApplication
         
         let alert = NSAlert()
-        alert.messageText = "Break Over!"
+        alert.messageText = "(fake) Break Over!"
         alert.informativeText = "Pressing 'OK' will start another timer"
         alert.alertStyle = .informational
         alert.addButton(withTitle: "OK")
